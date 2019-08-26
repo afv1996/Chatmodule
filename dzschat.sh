@@ -19,8 +19,9 @@ do
 	case $INPUT in
 		1)
 			echo "***********************************"
-			read -ep "Enter your username >" USERNAME
-			echo "$USERNAME/$CURRENTPID" > /proc/Chat_Add_Pid
+			read -ep "Enter your username >" NAME
+			export NAME1="$NAME"
+			echo "$NAME1/$CURRENTPID" > /proc/Chat_Add_Pid
 			echo "***********************************"
 			;;
 		2)
@@ -40,11 +41,11 @@ do
 			read -ep "Enter username of the other > " DESNAME
 			read -ep "Enter the PID of user > " DESPID
 			LINK="$PATHLINK$CURRENTPID-$DESNAME.sh"
-			echo '#!/bin/bash' >> $LINK
+			echo '#!/bin/bash' > $LINK
 			echo "IFS=''" >> $LINK
 			echo 'QUIT="GBTW"' >> $LINK
 			echo 'MESS="$1"' >> $LINK
-			echo "echo "$DESNAME/$DESPID/\$MESS" > /proc/Chat_Mess" >> $LINK
+			echo "echo "$NAME1/$DESPID/\$MESS" > /proc/Chat_Mess" >> $LINK
 		        echo "Enter $CURRENTPID-$DESNAME.sh \"[YOURMESS]\" to chat with the other"
 			chmod 777 $LINK
 			#echo 'while : ' >> $LINK

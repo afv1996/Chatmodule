@@ -160,7 +160,7 @@ static ssize_t procfs_mess_write(struct file *file, const char __user *buffer, s
 	char *char_pid_des;
 	char *msg_tmp;
 	char *mess;
-	char *user_des;
+	char *user_source;
 	msg = kzalloc(200*sizeof(char),GFP_KERNEL);
 	msg_tmp = msg;
 	if(copy_from_user(msg,buffer,length))
@@ -168,7 +168,7 @@ static ssize_t procfs_mess_write(struct file *file, const char __user *buffer, s
 		return EFAULT;
 	}
 	const char *ct = "/";
-	user_des = strsep(&msg,ct);
+	user_source = strsep(&msg,ct);
 	char_pid_des = strsep(&msg,ct);
 	mess = strsep(&msg,ct);
 	if(strcmp(char_pid_des,"all")==0)
@@ -178,7 +178,7 @@ static ssize_t procfs_mess_write(struct file *file, const char __user *buffer, s
 		long pid_des;
 		int ret = kstrtol(char_pid_des,10,&pid_des);
 		char mess2[200];
-		sprintf(mess2,"Mess: > %s\n", user_des, mess);
+		sprintf(mess2,"%s: > %s\n", user_source, mess);
 		send_mess(pid_des,mess2);
 	}
 	kfree(msg_tmp);
@@ -253,7 +253,7 @@ struct file_operations chat_addpid_fops =
 	.owner = THIS_MODULE,
 	.read = procfs_read,
 	.write = procfs_addpid_write,
-//	.unlocked_ioctl = chat_ioctl
+	.unlocked_ioctl = chat_ioctl
 };
 
 
